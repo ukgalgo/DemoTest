@@ -1,0 +1,223 @@
+Quick Data Entry Form for ASP.NET C# Razor Pages
+
+I need a quick data entry form to be created using ASP.NET Razor Pages and saved to a MS SQL database. The form itself does not need to have any specific design (as simple as you can get it.)  It will be incorporated later into another project and take on that project's design.
+
+The form should have the following fields.....
+* First Name  * Middle Name  * Last Name  * Suffix  * Drivers License Number  * Street Address  * City  * State  * Postal Code * Filing Type (Drop down ["SR22" | "SR26"] )
+
+And allow for up to (7) vehicles all with the following fields
+* Vehicle Year  * Vehicle Make  * Vehicle Model  * Vehicle VIN
+
+All the fields should be required except for Suffix, Middle Name, and any fields on Vehicles 2 through 7.
+
+All the fields should have BindProperties on the Model that state the Property Name and error message.  Do not add JS validation, just rely on the Model State to validate it.
+
+When saving to the database, please use a Stored procedure and not an ORM tool such as the Entity Framework.
+
+I am running behind on this project so my goal, to be quite blunt, is to get this done as quickly as possible and as cheaply as possible within the above parameters or else my dev team would work on it internally.  That does not mean I do not appreciate the work you will put into this, or that I expect you to low ball your bid.
+
+Final notes I have is that, first, I do not have a lot of spare time right now to have chats about requirements. Everything is here in the posting.  Second, I expect your bid to be final. If you bait and switch, I will be forced to cancel the contract without payment and leave bad feedback. Sorry, but it has happened before and I need to say it now on every post. Finally, please make sure your bid has your hourly rate and your expected time.
+
+Thank you very much for your consideration.
+
+
+ I can create a simple and efficient ASP.NET Razor Pages form with MS SQL stored procedure integration while ensuring model validation as per your specifications.
+
+- I will complete the form ASAP while maintaining high quality.
+- No JS, just ModelState validation for required fields.
+- Secure and optimized database insertion without ORM.
+- The form will be plain and ready for future integration.
+- No surprises; I will provide hourly rate & estimated time upfront.
+
+
+I need a quick data entry form to be created using ASP.NET Razor Pages and saved to a MS SQL database. The form itself does not need to have any specific design (as simple as you can get it.) It will be incorporated later into another project and take on that project's design.
+
+
+The form should have the following fields.....
+* First Name * Middle Name * Last Name * Suffix * Drivers License Number * Street Address * City * State * Postal Code * Filing Type (Drop down ["SR22" | "SR26"] )
+
+
+And allow for up to (7) vehicles all with the following fields
+* Vehicle Year * Vehicle Make * Vehicle Model * Vehicle VIN
+
+
+All the fields should be required except for Suffix, Middle Name, and any fields on Vehicles 2 through 7.
+
+
+All the fields should have BindProperties on the Model that state the Property Name and error message. Do not add JS validation, just rely on the Model State to validate it.
+
+
+When saving to the database, please use a Stored procedure and not an ORM tool such as the Entity Framework.
+
+
+I am running behind on this project so my goal, to be quite blunt, is to get this done as quickly as possible and as cheaply as possible within the above parameters or else my dev team would work on it internally. That does not mean I do not appreciate the work you will put into this, or that I expect you to low ball your bid.
+
+
+
+
+
+// RazorPagesDataEntry/Pages/DataEntry.cshtml
+@page
+@model RazorPagesDataEntry.Pages.DataEntryModel
+@{
+    ViewData["Title"] = "Data Entry Form";
+}
+
+<h2>Data Entry Form</h2>
+
+<form method="post">
+    <div>
+        <label>First Name:</label>
+        <input asp-for="FirstName" />
+        <span asp-validation-for="FirstName"></span>
+    </div>
+    <div>
+        <label>Middle Name:</label>
+        <input asp-for="MiddleName" />
+    </div>
+    <div>
+        <label>Last Name:</label>
+        <input asp-for="LastName" />
+        <span asp-validation-for="LastName"></span>
+    </div>
+    <div>
+        <label>Suffix:</label>
+        <input asp-for="Suffix" />
+    </div>
+    <div>
+        <label>Drivers License Number:</label>
+        <input asp-for="DriversLicenseNumber" />
+        <span asp-validation-for="DriversLicenseNumber"></span>
+    </div>
+    <div>
+        <label>Street Address:</label>
+        <input asp-for="StreetAddress" />
+        <span asp-validation-for="StreetAddress"></span>
+    </div>
+    <div>
+        <label>City:</label>
+        <input asp-for="City" />
+        <span asp-validation-for="City"></span>
+    </div>
+    <div>
+        <label>State:</label>
+        <input asp-for="State" />
+        <span asp-validation-for="State"></span>
+    </div>
+    <div>
+        <label>Postal Code:</label>
+        <input asp-for="PostalCode" />
+        <span asp-validation-for="PostalCode"></span>
+    </div>
+    <div>
+        <label>Filing Type:</label>
+        <select asp-for="FilingType">
+            <option value="">Select</option>
+            <option value="SR22">SR22</option>
+            <option value="SR26">SR26</option>
+        </select>
+        <span asp-validation-for="FilingType"></span>
+    </div>
+
+    <h3>Vehicles</h3>
+    @for (int i = 0; i < 7; i++)
+    {
+        <fieldset>
+            <legend>Vehicle @(i + 1)</legend>
+            <div>
+                <label>Year:</label>
+                <input name="Vehicles[@i].Year" />
+            </div>
+            <div>
+                <label>Make:</label>
+                <input name="Vehicles[@i].Make" />
+            </div>
+            <div>
+                <label>Model:</label>
+                <input name="Vehicles[@i].Model" />
+            </div>
+            <div>
+                <label>VIN:</label>
+                <input name="Vehicles[@i].VIN" />
+            </div>
+        </fieldset>
+    }
+
+    <button type="submit">Submit</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+// RazorPagesDataEntry/Pages/DataEntry.cshtml.cs
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using System.Data.SqlClient;
+
+namespace RazorPagesDataEntry.Pages
+{
+    public class Vehicle
+    {
+        public string Year { get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
+        public string VIN { get; set; }
+    }
+
+    public class DataEntryModel : PageModel
+    {
+        [BindProperty, Required(ErrorMessage = "First name is required")]
+        public string FirstName { get; set; }
+
+        [BindProperty]
+        public string MiddleName { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "Last name is required")]
+        public string LastName { get; set; }
+
+        [BindProperty]
+        public string Suffix { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "DL Number is required")]
+        public string DriversLicenseNumber { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "Street Address is required")]
+        public string StreetAddress { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "City is required")]
+        public string City { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "State is required")]
+        public string State { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "Postal Code is required")]
+        public string PostalCode { get; set; }
+
+        [BindProperty, Required(ErrorMessage = "Filing Type is required")]
+        public string FilingType { get; set; }
+
+        [BindProperty]
+        public List<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
+
+        public void OnGet()
+        {
+        }
+
+        public IActionResult OnPost()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            // Save to DB using ADO.NET and Stored Procedure (pseudo-code below)
+            // SqlConnection conn = new SqlConnection("<your_connection_string>");
+            // SqlCommand cmd = new SqlCommand("sp_InsertFormData", conn);
+            // Add parameters and execute
+
+            return RedirectToPage("Success");
+        }
+    }
+}
