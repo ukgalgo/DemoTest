@@ -1,5 +1,7 @@
 Quick Data Entry Form for ASP.NET C# Razor Pages
 
+
+
 I need a quick data entry form to be created using ASP.NET Razor Pages and saved to a MS SQL database. The form itself does not need to have any specific design (as simple as you can get it.)  It will be incorporated later into another project and take on that project's design.
 
 The form should have the following fields.....
